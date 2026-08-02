@@ -146,19 +146,7 @@ class WorldBuilder(private val am: AssetManager, private val seed: Long = 1337L)
     }
 
     private fun buildTerrain(): TerrainQuad {
-        val hm = object : AbstractHeightMap() {
-            override fun load(): Boolean {
-                size = TERRAIN_SIZE
-                heightData = FloatArray(TERRAIN_SIZE * TERRAIN_SIZE)
-                for (j in 0 until TERRAIN_SIZE) for (i in 0 until TERRAIN_SIZE) {
-                    heightData[j * TERRAIN_SIZE + i] = heights[j * TERRAIN_SIZE + i]
-                }
-                return true
-            }
-        }
-        hm.load()
-
-        val terrain = TerrainQuad("terrain", 65, TERRAIN_SIZE, hm)
+        val terrain = TerrainQuad("terrain", 65, TERRAIN_SIZE, heights)
         terrain.setLocalScale(SCALE, SCALE, SCALE)
         terrain.setLocalTranslation(-WORLD_M / 2f, 0f, -WORLD_M / 2f)
 
@@ -176,11 +164,19 @@ class WorldBuilder(private val am: AssetManager, private val seed: Long = 1337L)
             c.set(0.42f, 0.30f, 0.18f, 1f)
         }
 
-        val tm = com.jme3.terrain.geomipmap.TerrainMaterial(am,
-            3f, grassTex, rockTex, dirtTex,
-            com.jme3.terrain.geomipmap.TerrainMaterial.Blending.Low)
-        tm.setColor("GlobalAmbient", ColorRGBA(0.55f, 0.55f, 0.55f, 1f))
-        terrain.material = tm
+        val alphaTex = Procedural.paintTexture(128, 128) { _, _, c ->
+            c.set(1f, 0f, 0f, 1f)
+        }
+        val tm = Material(am, "Common/MatDefs/Terrain/Terrain.j3md").apply {
+            setTexture("Alpha", alphaTex)
+            setTexture("Tex1", grassTex)
+            setFloat("Tex1Scale", 64f)
+            setTexture("Tex2", dirtTex)
+            setFloat("Tex2Scale", 32f)
+            setTexture("Tex3", rockTex)
+            setFloat("Tex3Scale", 128f)
+        }
+        terrain.setMaterial(tm)
         return terrain
     }
 
@@ -198,7 +194,7 @@ class WorldBuilder(private val am: AssetManager, private val seed: Long = 1337L)
                 // Central ~400m x 400m city patch.
                 val cx = (i - blockCount / 2f) * 34f + rngBetween(-6f, 6f)
                 val cz = (j - blockCount / 2f) * 34f + rngBetween(-6f, 6f)
-                val dist = Math.sqrt(cx * cx + cz * cz).toFloat()
+                val dist = kotlin.math.sqrt(cx * cx + cz * cz)
                 if (dist > 190f) continue
 
                 val w = rngBetween(8f, 14f)
@@ -215,7 +211,7 @@ class WorldBuilder(private val am: AssetManager, private val seed: Long = 1337L)
     // ------------------------------------------------------------------ houses
 
     private fun buildHouses() {
-        val wallMat = Procedural.matLitTexture(am, 64, 64) { x, y, c ->
+        val wallMat = Procedural.matLitTexture(am, 64, 64, 4f) { x, y, c ->
             val brick = ((x / 16) + (y / 8)) % 2 == 0
             if (brick) c.set(0.72f, 0.52f, 0.38f, 1f) else c.set(0.62f, 0.44f, 0.32f, 1f)
         }
@@ -418,14 +414,14 @@ class WorldBuilder(private val am: AssetManager, private val seed: Long = 1337L)
     }
 
     private fun buildingWallTexture(): Material =
-        Procedural.matLitTexture(am, 128, 128) { x, y, c ->
+        Procedural.matLitTexture(am, 128, 128, 4f) { x, y, c ->
             // grid of windows on a concrete tower face
             val cell = 16
             val wall = 0.48f + 0.06f * valueNoise(x * 0.2f, y * 0.2f)
             val inX = x % cell < 6
             val inY = y % cell < 8
             if (inX && inY) {
-                val glow = 0.5f + 0.5f * valueNoise(x, y)
+                val glow = 0.5f + 0.5f * valueNoise(x.toFloat(), y.toFloat())
                 c.set(0.5f + 0.4f * glow, 0.75f + 0.2f * glow, 0.85f, 1f) // lit glass
             } else {
                 c.set(wall, wall, wall, 1f) // concrete

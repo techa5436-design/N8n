@@ -2,7 +2,6 @@ package com.agentgame.one
 
 import com.jme3.input.RawInputListener
 import com.jme3.input.TouchInput
-import com.jme3.input.event.BufferedTouchEvent
 import com.jme3.input.event.JoyAxisEvent
 import com.jme3.input.event.JoyButtonEvent
 import com.jme3.input.event.KeyInputEvent
@@ -32,7 +31,7 @@ class TouchControl(private val app: GameApp) : RawInputListener {
 
     // Movement joystick dead-reach in pixels (drag distance for full speed).
     private val joyRadius: Float
-        get() = app.cam.getWidth() * 0.14f
+        get() = app.camera.width * 0.14f
 
     init {
         app.inputManager.addRawInputListener(this)
@@ -44,22 +43,21 @@ class TouchControl(private val app: GameApp) : RawInputListener {
     }
 
     override fun onTouchEvent(evt: TouchEvent) {
-        val b = evt as BufferedTouchEvent
-        val x = b.x
-        val y = b.y
-        val id = b.pointerId
-        val w = app.cam.getWidth().toFloat()
+        val x = evt.x
+        val y = evt.y
+        val id = evt.pointerId
+        val w = app.camera.width.toFloat()
 
         if (app.player.dead) {
             // After death, any tap returns to the lobby.
-            if (b.type == TouchInput.InputType.DOWN) {
+            if (evt.type == TouchEvent.Type.DOWN) {
                 app.quitFromGame()
             }
             return
         }
 
-        when (b.type) {
-            TouchInput.InputType.DOWN -> {
+        when (evt.type) {
+            TouchEvent.Type.DOWN -> {
                 if (x < w / 2f && movePointerId < 0) {
                     movePointerId = id
                     moveCenter[0] = x
@@ -70,7 +68,7 @@ class TouchControl(private val app: GameApp) : RawInputListener {
                     firing = true
                 }
             }
-            TouchInput.InputType.UP -> {
+            TouchEvent.Type.UP -> {
                 if (id == movePointerId) {
                     movePointerId = -1
                     inForward = 0f
@@ -81,7 +79,7 @@ class TouchControl(private val app: GameApp) : RawInputListener {
                     firing = false
                 }
             }
-            TouchInput.InputType.MOVE -> {
+            TouchEvent.Type.MOVE -> {
                 if (id == movePointerId) {
                     // origin bottom-left: drag up increases y = forward, drag right = right
                     inRight = clamp((x - moveCenter[0]) / joyRadius, -1f, 1f)

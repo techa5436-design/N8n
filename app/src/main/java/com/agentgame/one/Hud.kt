@@ -27,8 +27,8 @@ class Hud(private val app: GameApp) {
     fun init() {
         font = app.assetManager.loadFont("Interface/Fonts/Default.fnt")
         val gui = app.guiNode
-        val cw = app.cam.getWidth().toFloat()
-        val ch = app.cam.getHeight().toFloat()
+        val cw = app.camera.width.toFloat()
+        val ch = app.camera.height.toFloat()
 
         // Health bar (background + foreground)
         hpBarBg = quad(360f, 22f, ColorRGBA(0.15f, 0.15f, 0.18f, 1f))
@@ -83,7 +83,7 @@ class Hud(private val app: GameApp) {
             alignment = BitmapFont.Align.Center
             setLocalTranslation(cw / 2f - 180f, ch / 2f + 60f, 0f)
         }
-        deathTitle.isVisible = false
+        deathTitle.cullHint = com.jme3.scene.Spatial.CullHint.Always
         gui.attachChild(deathTitle)
 
         deathInfo = BitmapText(font, false).apply {
@@ -92,13 +92,13 @@ class Hud(private val app: GameApp) {
             alignment = BitmapFont.Align.Center
             setLocalTranslation(cw / 2f - 200f, ch / 2f, 0f)
         }
-        deathInfo.isVisible = false
+        deathInfo.cullHint = com.jme3.scene.Spatial.CullHint.Always
         gui.attachChild(deathInfo)
     }
 
     fun update(tpf: Float) {
-        val cw = app.cam.getWidth().toFloat()
-        val ch = app.cam.getHeight().toFloat()
+        val cw = app.camera.width.toFloat()
+        val ch = app.camera.height.toFloat()
         // Health bar colour + scale
         val h = app.player.health / 100f
         hpBarFg.setLocalScale(h.coerceIn(0f, 1f), 1f, 1f)
@@ -118,8 +118,8 @@ class Hud(private val app: GameApp) {
         // Death overlay
         if (app.player.dead && !deathShown) {
             deathShown = true
-            deathTitle.isVisible = true
-            deathInfo.isVisible = true
+            deathTitle.cullHint = com.jme3.scene.Spatial.CullHint.Never
+            deathInfo.cullHint = com.jme3.scene.Spatial.CullHint.Never
             deathInfo.text = "FINAL SCORE  ${app.zombieManager.kills} kills\nTAP TO EXIT"
         }
     }
