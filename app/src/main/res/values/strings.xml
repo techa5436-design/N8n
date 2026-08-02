@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Agent Game 1</string>
+    <string name="splash_tagline">BATTLE ARENA</string>
+    <string name="lobby_title">LOBBY</string>
+    <string name="btn_play">PLAY</string>
+    <string name="btn_characters">CHARACTERS</string>
+    <string name="btn_weapons">WEAPONS</string>
+    <string name="btn_vehicles">VEHICLES</string>
+    <string name="btn_dress">DRESS</string>
+</resources>
