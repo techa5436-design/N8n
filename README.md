@@ -7,6 +7,20 @@ All 3D geometry (characters, weapons, vehicles, zombies, houses, trees, grass, t
 **generated procedurally in code** — so the game runs with **zero downloaded model/texture files**.
 Your exact 3D models (glTF/OBJ/FBX) can be swapped in later; see "Using your own 3D models" below.
 
+## Bonus: a Godot-style game engine + a Cline-style AI agent
+This repo also ships two self-contained features, reachable from the lobby:
+- **⚙ GAME ENGINE (`EngineActivity`)** — a fully functional, Godot-inspired 2D game engine in
+  Kotlin: nodes & scene tree, `_process`/`_physics_process`, signals, groups, scenes
+  (`.tscn` save/load), a physics server (rigid/static bodies, areas, collisions), camera,
+  input/joystick, UI controls, tweens, timers, and **MDScript** (a GDScript-like interpreter).
+  Includes a playable platformer demo.
+- **🤖 AI AGENT (`AgentActivity`)** — an AI coding agent that works like the VS Code **Cline**
+  extension: it plans a task, requests approval before every edit/command, shows diffs, runs
+  commands, iterates, and can roll back to a checkpoint.
+
+See **`README-ENGINE.md`** for the full feature breakdown and usage.
+
+
 ---
 
 ## What's implemented (feature → where in code)

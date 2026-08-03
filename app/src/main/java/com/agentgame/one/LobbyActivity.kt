@@ -118,6 +118,14 @@ class LobbyActivity : AndroidHarness() {
             startActivity(Intent(this, DressActivity::class.java))
         }
 
+        // Engine & AI Agent entries
+        makeButton("⚙  GAME ENGINE (Godot-style)") {
+            startActivity(Intent(this, EngineActivity::class.java))
+        }
+        makeButton("🤖  AI AGENT (Cline-style)") {
+            startActivity(Intent(this, AgentActivity::class.java))
+        }
+
         // Equipped loadout hint (bottom left)
         val loadout = TextView(this)
         loadout.text = "EQUIPPED   ${GameConfig.CHARACTERS[GameConfig.selectedCharacterId].name}  •  " +
