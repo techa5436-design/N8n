@@ -65,7 +65,7 @@ object SectionHelper {
         val scroll = ScrollView(activity)
         val list = LinearLayout(activity)
         list.orientation = LinearLayout.VERTICAL
-        scroll.addView(list, ScrollView.LayoutParams(
+        scroll.addView(list, ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         ))
         root.addView(scroll, LinearLayout.LayoutParams(

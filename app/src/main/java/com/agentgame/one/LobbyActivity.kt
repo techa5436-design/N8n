@@ -25,7 +25,7 @@ class LobbyActivity : AndroidHarness() {
 
     init {
         appClass = LobbyApp::class.java.name
-        screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         eglBitsPerPixel = 24
         eglAlphaBits = 8
         eglDepthBits = 24

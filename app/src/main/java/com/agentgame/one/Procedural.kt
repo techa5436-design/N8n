@@ -13,7 +13,7 @@ import com.jme3.texture.Image
 import com.jme3.texture.Texture
 import com.jme3.texture.Texture2D
 import com.jme3.util.BufferUtils
-import com.jme3.util.ImageRaster
+import com.jme3.texture.image.ImageRaster
 
 /**
  * Tiny toolkit for building every 3D object in the game procedurally (no external asset files),
@@ -43,8 +43,8 @@ object Procedural {
         am: AssetManager,
         width: Int,
         height: Int,
-        paint: (x: Int, y: Int, ColorRGBA) -> Unit,
         shininess: Float = 4f,
+        paint: (x: Int, y: Int, ColorRGBA) -> Unit,
     ): Material {
         val tex = paintTexture(width, height, paint)
         val m = Material(am, "Common/MatDefs/Light/Lighting.j3md")

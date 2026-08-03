@@ -83,21 +83,21 @@ class Player(private val app: GameApp) {
         }
 
         updateCamera()
-        updateModel()
+        updateModel(tpf)
     }
 
     private fun updateCamera() {
         val f = Vector3f(sin(yaw), 0f, cos(yaw))
         val camPos = position.add(f.mult(-7f)).add(0f, 4.2f, 0f)
-        app.cam.setLocation(camPos)
-        app.cam.lookAt(position.add(0f, 1.6f, 0f), Vector3f.UNIT_Y)
+        app.camera.setLocation(camPos)
+        app.camera.lookAt(position.add(0f, 1.6f, 0f), Vector3f.UNIT_Y)
     }
 
-    private fun updateModel() {
+    private fun updateModel(tpf: Float) {
         model.setLocalTranslation(position.x, position.y, position.z)
         CharacterBuilder.faceYaw(model, yaw)
         if (moving) {
-            walkPhase += app.tpf * 9f
+            walkPhase += tpf * 9f
             CharacterBuilder.animateWalk(model, walkPhase, 0.5f)
         } else {
             CharacterBuilder.animateWalk(model, walkPhase, 0f)

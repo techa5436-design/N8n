@@ -151,7 +151,7 @@ object CharacterBuilder {
         val legR = findChild(model, "legR") as? Node
         val armL = findChild(model, "armL") as? Node
         val armR = findChild(model, "armR") as? Node
-        val sin = Math.sin(phase).toFloat()
+        val sin = kotlin.math.sin(phase)
         legL?.setLocalRotation(Quaternion().fromAngles(sin * swingAmount, 0f, 0f))
         legR?.setLocalRotation(Quaternion().fromAngles(-sin * swingAmount, 0f, 0f))
         armL?.setLocalRotation(Quaternion().fromAngles(-sin * swingAmount * 0.7f, 0f, 0f))
